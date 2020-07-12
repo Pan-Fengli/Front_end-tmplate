@@ -7,11 +7,11 @@
 }
 
 .narrowTitle {
-    width: 60%;
+    width: 45%;
 }
 
 .wideTitle {
-    width:80.7%;
+    width:63.9%;
 }
 
 .fixBtn{
@@ -27,7 +27,7 @@
 .title {
     height: 50px;
     padding: 12px;
-    font-size: large;
+    font-size: 30px;
 }
 
 .detail {

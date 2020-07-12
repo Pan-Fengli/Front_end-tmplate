@@ -13,7 +13,6 @@ export default class DiscussReply extends React.Component {
     }
 
     addReply = (userId, username, userIcon, content) => {
-        console.log(content)
         this.props.addReplyReply({
             userId: userId,
             username: username,

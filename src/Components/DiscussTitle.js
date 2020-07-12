@@ -1,6 +1,6 @@
 import React from 'react';
 import "./DiscussTitle.css"
-import {Button} from "antd";
+import {Button, Space} from "antd";
 
 export default class DiscussTitle extends React.Component {
     constructor(props) {
@@ -14,14 +14,14 @@ export default class DiscussTitle extends React.Component {
     }
 
     componentDidMount() {
-        window.addEventListener('scroll', () => this.listenScroll())
+        window.addEventListener('scroll', this.listenScroll)
     }
 
     componentWillUnmount() {
-        window.removeEventListener('scroll', () => this.listenScroll());
+        window.removeEventListener('scroll', this.listenScroll);
     }
 
-    listenScroll() {
+    listenScroll = () => {
         let curPageOffset = window.pageYOffset;
         let tabBarBottomOffset = document.getElementById("tabBar").getBoundingClientRect().bottom;
         let titleTopOffset = document.getElementById("title").getBoundingClientRect().top;
@@ -49,47 +49,44 @@ export default class DiscussTitle extends React.Component {
         this.setState({
             prevPageOffset: curPageOffset,
         });
-    }
+    };
 
     render() {
+        const IconText = ({icon, text, clickFunc}) => (
+            <Space>
+                {React.createElement(icon, {onClick: clickFunc})}
+                {text}
+            </Space>
+        );
         return (
             <div>
-                <div className="row">
-                    <div className="col-md-1"/>
-                    <div className="col-md-8">
-                        {this.state.flag1 ?
-                            <div
-                                className={"fixTitle title" + ((this.state.flag1 && (!this.state.flag2 || this.state.flag3)) ? " wideTitle" : " narrowTitle")}>
-                                <span className="title">{this.props.discuss.title}</span>
-                                {this.state.flag3 ? <span className="fixBtn">
-                                    <Button>关注讨论</Button>
-                                    <Button
-                                        onClick={() => this.props.writeOrCancel()}>{this.props.writeComment ? '取消' : '写'}评论</Button>
+                {this.state.flag1 ?
+                    <div
+                        className={"fixTitle title" + ((this.state.flag1 && (!this.state.flag2 || this.state.flag3)) ? " wideTitle" : " narrowTitle")}>
+                        <span className="title">{this.props.discuss.title}</span>
+                        {this.state.flag3 ? <span className="fixBtn">
+                                        <Button>关注讨论</Button>
+                                        <Button
+                                        onClick={() => this.props.commentNow()}>{this.props.writeComment ? '取消' : '写'}评论</Button>
                                 </span> : <span/>}
-                            </div>
-                            : <div/>}
-                        <div id="tabBar">
-                            {this.props.tabs.map(tab =>
-                                <Button key={tab.id} type="primary">{tab.name}</Button>
-                            )}
-                        </div>
-                        <div className="title" id="title">
-                            <span className="title">{this.props.discuss.title}</span>
-                        </div>
-                        <div id="detail" className="detail">
-                            {this.props.discuss.detail}
-                        </div>
-                        <div className={"rightItem"} id="titleBtn">
-                            <Button type="button">关注讨论</Button>
-                            <Button type="button"
-                                    onClick={() => this.props.writeOrCancel()}>{this.props.writeComment ? '取消' : '写'}评论
-                            </Button>
-                            {this.props.writeComment ?
-                                <Button type="button" onClick={() => this.props.submitComment()}>提交</Button> :
-                                <div/>}
-                        </div>
                     </div>
-                    <div className="col-md-3"/>
+                    : <div/>}
+                <Space id="tabBar">
+                    {this.props.tabs.map(tab =>
+                        <Button key={tab.id} type="primary">{tab.name}</Button>
+                    )}
+                </Space>
+                <div className="title" id="title">
+                    <span className="title">{this.props.discuss.title}</span>
+                </div>
+                <div id="detail" className="detail">
+                    {this.props.discuss.detail}
+                </div>
+                <div className={"rightItem"} id="titleBtn">
+                    <Button type="button">关注讨论</Button>
+                    <Button type="button"
+                            onClick={() => this.props.commentNow()}>{this.props.writeComment ? '取消' : '写'}评论
+                    </Button>
                 </div>
             </div>
         );

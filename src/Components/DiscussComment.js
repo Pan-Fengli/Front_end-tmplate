@@ -29,7 +29,7 @@ export default class DiscussComment extends React.Component {
         this.state = {
             showReplies: false,
             replyList: replyList,
-            replyNow: false,
+            writeReply: false,
         };
     }
 
@@ -38,7 +38,7 @@ export default class DiscussComment extends React.Component {
     }
 
     replyNow() {
-        this.setState({replyNow: !this.state.replyNow});
+        this.setState({writeReply: !this.state.writeReply});
     }
 
     addReply = (userId, username, userIcon, content) => {
@@ -53,7 +53,7 @@ export default class DiscussComment extends React.Component {
                 toUserId: this.props.comment.userId,
                 toUsername: this.props.comment.username,
             }, ...this.state.replyList],
-            replyNow: false
+            writeReply: false
         });
     };
 
@@ -65,7 +65,7 @@ export default class DiscussComment extends React.Component {
                     time: formatTime(),
                 }), ...this.state.replyList
             ],
-            replyNow: false
+            writeReply: false
         })
     };
 
@@ -108,7 +108,7 @@ export default class DiscussComment extends React.Component {
             <span key="comment-basic-splay-reply"
                   onClick={() => this.showReplies()}>{this.state.showReplies ? '收起' : this.state.replyList.length + '条'}回复</span>,
             <span key="comment-basic-reply-to"
-                  onClick={() => this.replyNow()}>{this.state.replyNow ? "取消" : ""}回复</span>,
+                  onClick={() => this.replyNow()}>{this.state.writeReply ? "取消" : ""}回复</span>,
             <span key="comment-basic-delete" onClick={() =>
                 this.props.deleteComment(this.props.index)}>删除</span>
         ];
@@ -117,13 +117,13 @@ export default class DiscussComment extends React.Component {
                 actions={actions}
                 author={<span>{comment.username}</span>}
                 avatar={<Avatar src={comment.userIcon} alt="没有头像"/>}
-                content={<p>{comment.content}</p>}
+                content={<div dangerouslySetInnerHTML={{__html: comment.contentHTML}}/>}
                 datetime={
                     <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
                         <span>{timeMinus(comment.time)}</span>
                     </Tooltip>}
             >
-                {this.state.replyNow ? <ReplyEditor addReply={this.addReply}/> : <span/>}
+                {this.state.writeReply ? <ReplyEditor addReply={this.addReply}/> : <span/>}
                 {this.state.showReplies ?
                     <List itemLayout="vertical" size="large"
                           pagination={{pageSize: 10}}

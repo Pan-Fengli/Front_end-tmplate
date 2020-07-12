@@ -1,9 +1,8 @@
 import React from 'react';
-import {Button, Form, Input} from "antd";
-
-import icon from "../Assets/assets/icon_test.jpg";
-
-const {TextArea} = Input;
+import {Button, Form} from "antd";
+import "braft-editor/dist/index.css";
+import BraftEditor from "braft-editor";
+import icon from "../Assets/assets/icon_test.jpg"
 
 export default class CommentEditor extends React.Component {
     constructor(props) {
@@ -14,9 +13,9 @@ export default class CommentEditor extends React.Component {
         }
     }
 
-    replyTextChange(e) {
-        this.setState({commentState: e.target.value});
-    }
+    stateChange = (editorState) => {
+        this.setState({commentState: editorState});
+    };
 
     onSubmit() {
         if (this.state.commentState === null) {
@@ -25,10 +24,10 @@ export default class CommentEditor extends React.Component {
         }
         this.setState({submitting: true});
         setTimeout(() => {
-            this.props.addComment(1, '现代人', icon, this.state.replyText);
+            this.props.addComment(1, '现代人', icon, this.state.commentState.toHTML());
             this.setState({
                 submitting: false,
-                replyText: "",
+                commentState: null,
             });
         }, 1000);
     }
@@ -36,17 +35,15 @@ export default class CommentEditor extends React.Component {
 
     render() {
         return (
-            <>
-                <Form.Item>
-                    <TextArea rows={4} onChange={(e) => this.replyTextChange(e)} value={this.state.replyText}/>
+            <div>
+                <Form.Item style={{height: "300px"}}>
+                    <BraftEditor value={this.state.commentState} onChange={this.stateChange}/>
                 </Form.Item>
                 <Form.Item>
-                    <Button htmlType="submit" onClick={() => this.onSubmit()} type="primary"
-                            loading={this.state.submitting}>
-                        提交
-                    </Button>
+                    <Button style={{zIndex:"99"}} htmlType="submit" onClick={() => this.onSubmit()} type="primary"
+                            loading={this.state.submitting}>提交</Button>
                 </Form.Item>
-            </>
+            </div>
         );
     }
 }

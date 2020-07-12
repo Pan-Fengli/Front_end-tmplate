@@ -1,12 +1,11 @@
 import React from 'react';
-import {formatTime} from "../Functions/timeMinus";
 import "./DiscussDetailPage.css"
 import DiscussTitle from "../Components/DiscussTitle";
 import icon from "../Assets/assets/icon_test.jpg";
 import DiscussComment from "../Components/DiscussComment";
-import BraftEditor from "braft-editor";
-import {List} from "antd";
-import 'braft-editor/dist/index.css';
+import {Col, List, Row} from "antd";
+import CommentEditor from "../Components/CommentEditor";
+import {formatTime} from "../Functions/timeMinus";
 
 const discuss = {
     id: 1,
@@ -46,7 +45,7 @@ const commentList = [];
 for (let i = 0; i < 10; i++) {
     commentList.push({
         id: i,
-        content: `这是评论 ${Math.floor(Math.random() * 100)}`,
+        contentHTML: "<div>这是评论" + Math.floor(Math.random() * 100) + "</div>",
         userIcon: icon,
         userId: i,
         username: "非洲人",
@@ -64,42 +63,14 @@ export default class DiscussDetailPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            discuss: discuss,
-            similarDiscusses: similarDiscusses,
-            prevOffset: 0,
-            titleVisible: true,
+            discussTitle: discuss,
+            similarDiscussList: similarDiscusses,
             commentList: commentList,
             writeComment: false,
-            newCommentState: null
         };
     }
 
-    submitComment() {
-        let newComment = {
-            id: this.state.commentList.length + 1,
-            content: this.state.newCommentState.toHTML(),
-            time: formatTime()
-        };
-        let newUser = {
-            id: this.state.commentUsers.length + 1,
-            name: 'sys', intro: 'a student'
-        };
-        let newComments = this.state.commentList.slice();
-        newComments.push(newComment);
-        let newUsers = this.state.commentUsers.slice();
-        newUsers.push(newUser);
-        this.setState({
-            commentList: newComments,
-            commentUsers: newUsers,
-            writeComment: false,
-            newCommentState: null
-        });
-    }
-
-    writeOrCancel() {
-        if (this.state.writeComment) {
-            this.setState({newCommentState: null});
-        }
+    commentNow() {
         this.setState({writeComment: !this.state.writeComment});
     }
 
@@ -159,52 +130,57 @@ export default class DiscussDetailPage extends React.Component {
         this.setCommentInList(comment, index);
     };
 
+    addComment = (userId, username, userIcon, contentHTML) => {
+        this.setState({
+            commentList: [{
+                id: this.state.commentList[this.state.commentList.length - 1].id + 1,
+                contentHTML: contentHTML,
+                userIcon: userIcon,
+                userId: userId,
+                username: username,
+                likeN: 0,
+                disLikeN: 0,
+                starN: 0,
+                hasLike: false,
+                hasDisLike: false,
+                hasStar: false,
+                time: formatTime()
+            }, ...this.state.commentList],
+            writeComment: false
+        })
+    };
+
     render() {
         return (
-            <div>
-                <div>
-                    <DiscussTitle discuss={this.state.discuss} tabs={this.state.discuss.tabs}
-                                  writeComment={this.state.writeComment}
-                                  flipWriteComment={() => this.setState({writeComment: !this.state.writeComment})}
-                                  submitComment={() => this.submitComment()}
-                                  writeOrCancel={() => this.writeOrCancel()}
-                    />
-                </div>
-                <div className="row">
-                    <div className="col-md-1"/>
-                    <div className="col-md-7">
+            <Row>
+                <Col span={19}>
+                    <div>
+                        <DiscussTitle discuss={this.state.discussTitle} tabs={this.state.discussTitle.tabs}
+                                      writeComment={this.state.writeComment}
+                                      commentNow={() => this.commentNow()}
+                        />
+                    </div>
+                    <div>
+                        {this.state.writeComment ? <CommentEditor addComment={this.addComment}/> : <></>}
                         <span>共{this.state.commentList.length}条评论</span>
-                        {
-                            this.state.writeComment ?
-                                <div className="commentEditor">
-                                    <BraftEditor value={this.state.newCommentState} className="commentEditor"
-                                                 onChange={(editorState => this.setState({newCommentState: editorState}))}/>
-                                </div> : <div/>
-                        }
                         <List itemLayout="vertical" size="large"
                               pagination={{pageSize: 15}}
                               dataSource={this.state.commentList}
-                              footer={<div><b>淘兴趣</b></div>}
                               renderItem={(item, index) => (
-                                  <DiscussComment comment={item} deleteComment={(index) => this.deleteComment(index)}
-                                                  index={index} like={this.likeComment} disLike={this.disLikeComment}
+                                  <DiscussComment comment={item}
+                                                  deleteComment={(index) => this.deleteComment(index)}
+                                                  index={index} like={this.likeComment}
+                                                  disLike={this.disLikeComment}
                                                   star={this.starComment}/>
                               )}
                         />
                     </div>
-                    {/*<div className="col-md-3 otherContainer">*/}
-                    {/*    <div className="otherItem">关于作者：*/}
-                    {/*        <DiscussUserCell user={this.state.user}/>*/}
-                    {/*    </div>*/}
-                    {/*    <div className="otherItem similarContainer">相似讨论：*/}
-                    {/*        {this.state.similarDiscusses.map(discuss =>*/}
-                    {/*            <div className="similarItem" key={discuss.id}>*/}
-                    {/*                <DiscussCell discuss={discuss}/>*/}
-                    {/*            </div>)}*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-                </div>
-            </div>
+                </Col>
+                <Col span={5}>
+                    这里加类似讨论链接。
+                </Col>
+            </Row>
         );
     }
 }
+
