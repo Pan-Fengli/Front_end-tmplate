@@ -6,8 +6,6 @@ on:
 
 jobs:
   main:
-    env:
-      process.env.CI : false
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -17,6 +15,8 @@ jobs:
         
     # react项目为npm run-script build，vue项目改为npm run build
     - name: Install and Build
+      env:
+        process.env.CI : false
       run: |
         npm install
         npm install braft-editor
