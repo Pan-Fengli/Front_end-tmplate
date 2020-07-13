@@ -6,6 +6,8 @@ on:
 
 jobs:
   main:
+    env:
+      process.env.CI : false
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
