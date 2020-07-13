@@ -29,6 +29,8 @@ jobs:
     # react项目的FOLDER为build，vue项目改为dist   
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
+      env:
+        process.env.CI : false
       with:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         BRANCH: gh-pages
