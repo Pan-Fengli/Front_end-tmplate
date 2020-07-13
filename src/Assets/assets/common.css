@@ -1,0 +1,24 @@
+/*MyView.js*/
+.logo {
+    width: 120px;
+    height: 31px;
+    line-height: 31px;
+    margin: 16px 28px 16px 0;
+    float: left;
+    font-size: 24px;
+}
+
+.site-layout-background {
+    background: #fff;
+}
+
+.header {
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+    height: 64px;
+}
+
+.subPage {
+    margin-top: 64px;
+}

@@ -1,0 +1,40 @@
+.fixTitle {
+    position: fixed;
+    top: 64px;
+    height: 50px;
+    z-index: 2;
+    background-color: white;
+}
+
+.narrowTitle {
+    width: 45%;
+}
+
+.wideTitle {
+    width:63.9%;
+}
+
+.fixBtn{
+    float:right;
+}
+
+.rightItem {
+    text-align: right;
+    height: 50px;
+    padding: 10px;
+}
+
+.title {
+    height: 50px;
+    padding: 12px;
+    font-size: 30px;
+}
+
+.detail {
+    padding: 20px
+}
+
+/*.upperBtn {*/
+/*    z-index: 2;*/
+/*    background-color: red;*/
+/*}*/
