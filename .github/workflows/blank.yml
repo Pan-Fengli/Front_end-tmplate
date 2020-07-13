@@ -17,6 +17,11 @@ jobs:
     - name: Install and Build
       run: |
         npm install
+        npm install braft-editor
+        npm install antd
+        npm install bootstrap@3
+        npm install react-chat-elements
+        npm install react-router-dom
         npm run-script build
      
     # react项目的FOLDER为build，vue项目改为dist   
