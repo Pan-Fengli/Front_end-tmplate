@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 import {TaobaoCircleOutlined} from '@ant-design/icons';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import './LoginPage.css';
+import makeURL from "../Functions/makeURL";
 
 export default class LoginPage extends React.Component {
     constructor(props) {
@@ -14,10 +15,24 @@ export default class LoginPage extends React.Component {
         }
     }
 
-
     Login() {
-        if (this.state.email.length > 0 && this.state.PW.length > 0)
-            this.props.history.push('/home');
+        if (this.state.email.length > 0 && this.state.PW.length > 0) {
+            const params = {
+                userId: this.state.email,
+                password: this.state.PW,
+            };
+            let url = 'http://localhost:8080/user/login';
+            url = makeURL(url, params);
+            console.log(url.href);
+            fetch(url.href, {method: "GET"}).then(rsp => rsp.json().then(rsp => {
+                if (rsp.id != 0) {
+                    sessionStorage.setItem("userId", rsp.id);
+                    sessionStorage.setItem("userName", rsp.username);
+                    sessionStorage.setItem("userIcon", rsp.icon);
+                    this.props.history.push("/home")
+                }
+            }))
+        }
     }
 
 

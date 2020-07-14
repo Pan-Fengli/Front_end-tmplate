@@ -50,18 +50,36 @@ export default class RegisterPage extends React.Component {
     SubmitRegister() {
         let pw1 = document.getElementById("pw1").value;
         let pw2 = document.getElementById("pw2").value;
-        console.log(pw1);
-        console.log(pw2);
-        console.log(this.state.email);
-        console.log(this.state.nickname);
-        console.log(this.state.phonenumber);
         if ((this.state.email.length > 0)
             && (this.state.nickname.length > 0)
             && (this.state.phonenumber.length > 0)
             && (pw1 > 0)
             && (pw2 > 0)
-            && (pw1 === pw2))
-            this.props.history.push('/discuss');
+            && (pw1 === pw2)) {
+            const registerURL = 'http://localhost:8080/user/register';
+            fetch(registerURL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    userName: this.state.nickname,
+                    email: this.state.email,
+                    password: this.state.PW,
+                    phoneNumber: this.state.phonenumber
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json);
+                    sessionStorage.setItem("userId", json.id);
+                    sessionStorage.setItem("userName", json.username);
+                    sessionStorage.setItem("userIcon", json.icon);
+                    this.props.history.push("/home");
+
+                })
+
+        }
     }
 
     render() {

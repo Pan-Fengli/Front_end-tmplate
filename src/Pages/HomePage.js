@@ -30,7 +30,11 @@ export default class HomePage extends React.Component {
                           selectedKeys={this.state.headNav} onClick={(e) => this.setState({headNav: e.key})}>
                         <Menu.Item key="discuss"><Link to={'/home/discuss'}>推荐</Link></Menu.Item>
                         <Menu.Item key="myHome"><Link to={'/home/myHome'}>我的</Link></Menu.Item>
-                        <Menu.Item style={{float:"right"}} key="quit"><Link to={'/logIn'}>退出</Link></Menu.Item>
+                        <Menu.Item style={{float:"right"}} key="quit"><Link to={'/logIn'} onClick={()=>{
+                            sessionStorage.removeItem("userId");
+                            sessionStorage.removeItem("userName");
+                            sessionStorage.removeItem("userIcon");
+                        }}>退出</Link></Menu.Item>
                     </Menu>
                 </Header>
                 <div className="subPage">
