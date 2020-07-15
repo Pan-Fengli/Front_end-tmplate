@@ -9,6 +9,7 @@ class MessageStatisticsView extends React.Component {
             listData:[],
             msg:''
         }
+        this.setContent=this.setContent.bind(this);
     }
 
     componentDidMount() {
@@ -23,7 +24,7 @@ class MessageStatisticsView extends React.Component {
         console.log("set id:"+id);
 
         let list=[];
-        if(id===3){//评论
+        if(id==3){//评论
             for (let i = 0; i < 23; i++) {
                 list.push({
                     href: '',//跳转页面
@@ -33,7 +34,7 @@ class MessageStatisticsView extends React.Component {
                     content: '讨论'+i,
                 });
             }
-        }else if(id===4){//点赞
+        }else if(id==4){//点赞
             for (let i = 0; i < 100; i++) {
                 list.push({
                     href: '',//跳转页面
@@ -42,10 +43,9 @@ class MessageStatisticsView extends React.Component {
                     description: '',
                     content: '讨论'+i,
                 });
-
             }
         }else{//关注
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 50; i++) {
                 list.push({
                     href: '',//跳转页面
                     title: `用户 ${i}关注了你`,

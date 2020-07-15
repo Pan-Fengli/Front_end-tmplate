@@ -2,6 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import Navigator from "./Navigator";
+
 class Collectionlist extends React.Component{
     constructor(props) {
         super(props);
