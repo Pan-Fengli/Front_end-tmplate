@@ -1,11 +1,14 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+<<<<<<< HEAD
     <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <Languages>
         <language minSize="76" name="JavaScript" />
       </Languages>
     </inspection_tool>
+=======
+>>>>>>> 3b1693d816fc17c3cbe13211aeffe8d8b7cf54bc
     <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
   </profile>
 </component>
