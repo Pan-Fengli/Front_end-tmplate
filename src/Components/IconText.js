@@ -4,7 +4,7 @@ import React from "react";
 const IconText = ({icon, text, clickFunc}) => (
     <Space onClick={clickFunc}>
         {React.createElement(icon)}
-        {text}
+        <div data-cy={'iconText'}>{text}</div>
     </Space>
 );
 

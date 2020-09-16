@@ -1,14 +1,13 @@
 import React from "react";
-import {Input, Space, Button, Form, Checkbox} from 'antd';
+import {Button, Checkbox, Form, Input} from 'antd';
 import 'antd/dist/antd.css';
-import {TaobaoCircleOutlined} from '@ant-design/icons';
-import {UserOutlined, LockOutlined} from '@ant-design/icons';
+import {LockOutlined, TaobaoCircleOutlined, UserOutlined} from '@ant-design/icons';
 import './LoginPage.css';
-import makeURL from "../Functions/makeURL";
+import {logIn} from "../Functions/login";
 
 export default class LoginPage extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             email: "",
             PW: "",
@@ -17,25 +16,9 @@ export default class LoginPage extends React.Component {
 
     Login() {
         if (this.state.email.length > 0 && this.state.PW.length > 0) {
-            const params = {
-                userId: this.state.email,
-                password: this.state.PW,
-            };
-            let url = 'http://localhost:8080/user/login';
-            url = makeURL(url, params);
-            console.log(url.href);
-            fetch(url.href, {method: "GET"}).then(rsp => rsp.json().then(rsp => {
-                if (rsp.id != 0) {
-                    sessionStorage.setItem("userId", rsp.id);
-                    sessionStorage.setItem("userName", rsp.username);
-                    sessionStorage.setItem("userIcon", rsp.icon);
-                    sessionStorage.setItem("recommendType", "recommend");
-                    this.props.history.push("/home")
-                }
-            }))
+            logIn(this.state.email, this.state.PW, this.props.history);
         }
     }
-
 
     render() {
         return (
@@ -64,6 +47,7 @@ export default class LoginPage extends React.Component {
                             ]}
                         >
                             <Input
+                                id="emailInput"
                                 prefix={<UserOutlined className="site-form-item-icon"/>}
                                 placeholder="邮箱"
                                 onChange={(e) => {
@@ -81,6 +65,7 @@ export default class LoginPage extends React.Component {
                             ]}
                         >
                             <Input
+                                id="pwInput"
                                 prefix={<LockOutlined className="site-form-item-icon"/>}
                                 type="password"
                                 placeholder="密码"
@@ -94,13 +79,16 @@ export default class LoginPage extends React.Component {
                                 <Checkbox>记住我</Checkbox>
                             </Form.Item>
 
-                            <a className="login-form-forgot" href="/findPW">
-                                忘记密码
+                            <a className="login-form-forgot">
+                                <span onClick={()=>this.props.history.push("/findPW")}>
+                                    忘记密码
+                                </span>
                             </a>
                         </Form.Item>
 
                         <Form.Item>
                             <Button
+                                data-cy="login"
                                 type="primary"
                                 htmlType="submit"
                                 className="login-form-button"
@@ -108,7 +96,10 @@ export default class LoginPage extends React.Component {
                             >
                                 登录
                             </Button>
-                            或者 <a href="/register">立刻注册</a>
+                            或者 <a data-cy="goToRegister"><span
+                            onClick={() => this.props.history.push("/register")}>立刻注册
+                            </span>
+                        </a>
                         </Form.Item>
                     </Form>
                 </div>

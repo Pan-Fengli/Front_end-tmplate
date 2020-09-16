@@ -2,6 +2,8 @@ import React from "react";
 import {Button, Form, Input, Select} from 'antd';
 import 'antd/dist/antd.css';
 import {TaobaoCircleOutlined} from '@ant-design/icons';
+import {postFetch} from "../Functions/fetchRequest";
+import {logIn} from "../Functions/login";
 
 const {Option} = Select;
 
@@ -26,6 +28,8 @@ export default class RegisterPage extends React.Component {
             email: "",
             nickname: "",
             PW: "",
+            pw1: "",
+            pw2: "",
             phonenumber: "",
         }
 
@@ -35,38 +39,22 @@ export default class RegisterPage extends React.Component {
         this.props.history.push('/login');
     }
 
-    SubmitRegister() {
-        let pw1 = document.getElementById("pw1").value;
-        let pw2 = document.getElementById("pw2").value;
+
+    submitRegister() {
         if ((this.state.email.length > 0)
             && (this.state.nickname.length > 0)
             && (this.state.phonenumber.length > 0)
-            && (pw1 > 0)
-            && (pw2 > 0)
-            && (pw1 === pw2)) {
-            const registerURL = 'http://localhost:8080/user/register';
-            fetch(registerURL, {
-                method: 'POST',
-                body: JSON.stringify({
+            && (this.state.PW.length > 0)) {
+            postFetch('/user/register',
+                {
                     userName: this.state.nickname,
                     email: this.state.email,
                     password: this.state.PW,
                     phoneNumber: this.state.phonenumber
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
+                }, (rsp) => {
+                    logIn(this.state.email, this.state.PW, this.props.history);
                 }
-            })
-                .then(response => response.json())
-                .then(json => {
-                    console.log(json);
-                    sessionStorage.setItem("userId", json.id);
-                    sessionStorage.setItem("userName", json.username);
-                    sessionStorage.setItem("userIcon", json.icon);
-                    this.props.history.push("/home");
-
-                })
-
+            );
         }
     }
 
@@ -106,6 +94,7 @@ export default class RegisterPage extends React.Component {
                             ]}
                         >
                             <Input
+                                id="emailInput"
                                 placeholder={"输入邮箱"}
                                 onChange={(e) => {
                                     this.setState({email: e.target.value})
@@ -123,7 +112,21 @@ export default class RegisterPage extends React.Component {
                             ]}
                             hasFeedback
                         >
-                            <Input.Password id="pw1" placeholder={"设置密码"}/>
+                            <Input.Password
+                                id="pw1"
+                                onChange={(e) => {
+                                    if (e.target.value === this.state.pw2) {
+                                        this.setState({
+                                            pw1: e.target.value,
+                                            PW: e.target.value
+                                        });
+                                    } else {
+                                        this.setState({
+                                            pw1: e.target.value
+                                        });
+                                    }
+                                }}
+                                placeholder={"设置密码"}/>
                         </Form.Item>
 
                         <Form.Item
@@ -141,12 +144,26 @@ export default class RegisterPage extends React.Component {
                                             return Promise.resolve();
                                         }
 
-                                        return Promise.reject('The two passwords that you entered do not match!');
+                                        return Promise.reject('两次输入不一致');
                                     },
                                 }),
                             ]}
                         >
-                            <Input.Password id="pw2" placeholder={"确认密码"}/>
+                            <Input.Password
+                                id="pw2"
+                                onChange={(e) => {
+                                    if (e.target.value === this.state.pw1) {
+                                        this.setState({
+                                            pw2: e.target.value,
+                                            PW: e.target.value
+                                        });
+                                    } else {
+                                        this.setState({
+                                            pw2: e.target.value
+                                        });
+                                    }
+                                }}
+                                placeholder={"确认密码"}/>
                         </Form.Item>
 
                         <Form.Item
@@ -160,6 +177,7 @@ export default class RegisterPage extends React.Component {
                             ]}
                         >
                             <Input
+                                id="nameInput"
                                 placeholder={"设置昵称"}
                                 onChange={(e) => {
                                     this.setState({nickname: e.target.value})
@@ -176,7 +194,8 @@ export default class RegisterPage extends React.Component {
                             ]}
                         >
                             <Input
-                                addonBefore={prefixSelector}
+                                id="numberInput"
+                                placeholder={"手机号码"}
                                 style={{
                                     width: '100%',
                                 }}
@@ -188,11 +207,12 @@ export default class RegisterPage extends React.Component {
 
                         <Form.Item style={{maxWidth: "200px", margin: "0 auto"}}>
                             <Button
+                                id="submitButton"
                                 type="primary"
                                 htmlType="submit"
                                 style={{float: "left"}}
                                 onClick={() => {
-                                    this.SubmitRegister()
+                                    this.submitRegister()
                                 }}
                             >
                                 注册

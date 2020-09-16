@@ -1,5 +1,5 @@
 import React from "react";
-import {Input, Space, Button, Form, Checkbox} from 'antd';
+import {Input, Button, Form} from 'antd';
 import 'antd/dist/antd.css';
 import {TaobaoCircleOutlined} from '@ant-design/icons';
 import './LoginPage.css';
